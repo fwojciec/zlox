@@ -91,7 +91,8 @@ const Lines = struct {
                 return;
             }
         }
-        try self.data.appendSlice(&[_]u16{ line, 1 });
+        try self.data.append(line);
+        try self.data.append(1);
     }
 
     pub fn get(self: *Lines, index: usize) ByteCodeError!u16 {
