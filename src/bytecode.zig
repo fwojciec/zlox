@@ -1,6 +1,5 @@
 const std = @import("std");
 const ArrayList = std.ArrayList;
-const MultiArrayList = std.MultiArrayList;
 const Allocator = std.mem.Allocator;
 const Value = @import("./value.zig").Value;
 
