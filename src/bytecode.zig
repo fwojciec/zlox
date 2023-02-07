@@ -52,7 +52,7 @@ pub const Chunk = struct {
     }
 };
 
-fn disassemble(writer: anytype, chunk: *Chunk) !void {
+pub fn disassemble(writer: anytype, chunk: *Chunk) !void {
     var offset: usize = 0;
     while (offset < chunk.codes.items.len) {
         const code = @intToEnum(OpCode, chunk.codes.items[offset]);
