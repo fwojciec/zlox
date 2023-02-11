@@ -1,5 +1,6 @@
 const std = @import("std");
 const bytecode = @import("bytecode.zig");
+const vm = @import("vm.zig");
 
 pub fn main() !void {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
@@ -12,6 +13,7 @@ pub fn main() !void {
     try chunk.write(constant, 123);
     try chunk.writeOpCode(bytecode.OpCode.op_return, 123);
     try bytecode.disassemble(std.io.getStdOut().writer(), &chunk);
+    _ = try vm.interpret(&chunk);
     chunk.deinit();
 }
 
