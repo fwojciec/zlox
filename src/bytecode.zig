@@ -1,4 +1,5 @@
 const std = @import("std");
+const debug = @import("./debug.zig");
 const ArrayList = std.ArrayList;
 const Allocator = std.mem.Allocator;
 const Value = @import("./value.zig").Value;
@@ -51,26 +52,6 @@ pub const Chunk = struct {
         return index;
     }
 };
-
-pub fn disassemble(writer: anytype, chunk: *Chunk) !void {
-    var offset: usize = 0;
-    while (offset < chunk.codes.items.len) {
-        const code = @intToEnum(OpCode, chunk.codes.items[offset]);
-        const line = try chunk.lines.get(offset);
-        try writer.print("{} {} ", .{ offset, line });
-        switch (code) {
-            .op_constant => {
-                const index = chunk.codes.items[offset + 1];
-                try writer.print("OP_CONSTANT {} {}\n", .{ index, chunk.constants.items[index] });
-                offset += 2;
-            },
-            .op_return => {
-                try writer.print("OP_RETURN\n", .{});
-                offset += 1;
-            },
-        }
-    }
-}
 
 const Lines = struct {
     // [line][count]...
@@ -155,7 +136,7 @@ test "chunk" {
     var result = ArrayList(u8).init(std.testing.allocator);
     defer result.deinit();
 
-    try disassemble(result.writer(), &chunk);
+    try debug.disassembleChunk(result.writer(), &chunk);
     const expected =
         \\0 123 OP_CONSTANT 0 1.2e+00
         \\2 124 OP_RETURN
